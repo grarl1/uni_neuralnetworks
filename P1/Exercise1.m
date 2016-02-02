@@ -36,7 +36,7 @@ status = zeros(1,14);
 %   the perceptrons active or inactive.
 % After each iteration we print status of perceptrons 13 and 14
 %   which represent the output layer of the neural net.
-while ( ( length(input_vector) != 0 ) | (status != 0) )
+while ( ( length(input_vector) ~= 0 ) | (status ~= 0) )
   input_vector(14) = 0; % extend vector read with zeros
   status = status + transpose(input_vector);
   status = status * Net;
