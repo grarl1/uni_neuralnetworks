@@ -1,3 +1,5 @@
+#! /usr/bin/octave -qf
+
 % Modeling the Artificial Neural Network as a graph
 
 % Input control
