@@ -1,4 +1,10 @@
 #! /usr/bin/octave -qf
+
+%
+% This script trains and tests a perceptron and
+% an Adaline with input_file passed and prints some results
+%
+
 addpath("./utils/");
 
 % Implements a learning perceptron given a file
@@ -10,16 +16,22 @@ argc = length(args_list);
 
 % Parse arguments
 if (argc < 2)
-  disp('Usage: perceptron input_file_path output_file_path [alpha]');
+  disp('Usage: train_and_test input_file_path output_file_path [alpha]');
   return
 end
 
 % Input
 input_file = fopen(args_list{1},'r');
+if (input_file == -1)
+  printf("Error opening %s",args_list{1});
+  return
+end
+%TODO REMOVE
+input_file = fopen(args_list{1},'r');
 
 % Read alpha value if specified, otherwise set it to 1.
 if (argc >= 3)
-  alpha = args_list{3};
+  alpha = str2double(args_list{3});
 else
   alpha = 1;
 end
@@ -49,23 +61,39 @@ fclose(input_file);
 %   will be used both for training and testing.
 training = 0.7;
 test = 0.3;
-max_ages = 200;
+max_ages = 20;
 theta = 0;
+tolerance = 0.001;
 
 % shuffle entries of the matrix
 shuffled_indexes = shuffle_array(n_samples);
 training_indexes = shuffled_indexes(1:floor(training*n_samples));
-test_indexes = shuffled_indexes(end-ceil(test*n_samples):end);
+test_indexes = shuffled_indexes(end-ceil(test*(n_samples - 1)):end);
 % As in these examples we just have to classes, we are going to define
 % the class for each sample as (0 1) -> -1 and (1 0) -> 1
-actual_class=Sample_class(:,1)-Sample_class(:,2);
-Train_set = [ Sample_attr(training_indexes,:),  actual_class(training_indexes)];
+Train_set = Sample_attr(training_indexes,:);
+Train_class = Sample_class(training_indexes,:);
 Test_set = Sample_attr(test_indexes,:);
 
+%TODO remove following lines, are just for testint neural networks.
 % Train the perceptron
-[b w error n_ages] = perceptron_train(alpha, theta, max_ages, Train_set);
+[b w error n_ages] = perceptron_train(alpha, theta, max_ages, Train_set, Train_class);
 % Perform test for remaining samples.
-prediction = perceptron_test(theta, b, w, Test_set);
-%TODO remove the following lines, it is just for testing correctness purposes.
+prediction = network_test(b, w, Test_set);
+printf("PERCEPTRON: \n");
 printf("%% of accuracy over test set after %d ages of training:\n", n_ages);
-sum(prediction == actual_class(test_indexes))/size(Test_set,1)*100
+matched = all(prediction == Sample_class(test_indexes,:), 2);
+sum(matched)/length(matched)*100
+printf("%d misses\n",length(matched)-sum(matched));
+
+%Train the Adaline
+alpha = 0.01;
+[b w error n_ages] = adaline_train(alpha, tolerance, max_ages, Train_set, Train_class);
+prediction = network_test(b, w, Test_set);
+printf("ADALINE: \n");
+printf("%% of accuracy over test set after %d ages of training:\n", n_ages);
+matched = all(prediction == Sample_class(test_indexes,:), 2);
+sum(matched)/length(matched)*100
+printf("%d misses\n",length(matched)-sum(matched));
+printf("ECM for Adaline :\n");
+error
