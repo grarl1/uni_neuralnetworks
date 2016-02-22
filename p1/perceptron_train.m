@@ -23,7 +23,7 @@
 %     class predicted and actual class being 0 a 100% match and 0 a 0%.
 %   n_ages: iterations performed during training.
 %
-function [b w error n_ages] = perceptron_train (alpha, theta, max_ages, Train_set, Class_set)
+function [b w error ecm n_ages] = perceptron_train (alpha, theta, max_ages, Train_set, Class_set)
 
   % Initializing values
   perceptron_out_no = size(Class_set, 2); %number of output perceptrons
@@ -42,14 +42,15 @@ function [b w error n_ages] = perceptron_train (alpha, theta, max_ages, Train_se
     previous_w = w;
     previous_b = b;
     n_errors = 0;
-    predicted = [];
+    ecm_iter = 0;
 
     for i = 1:n_samples
       y_in = b + w*Train_set( i, : )';
-      predicted = [predicted ; f_y_perceptron(y_in, theta)'];
-      if ( ~isequal( predicted(i,:), Class_set(i,:)))
+      ecm_iter += sum((Class_set(i,:)'-y_in).^2);
+      predicted = f_y_perceptron(y_in, theta)';
+      if ( ~isequal( predicted, Class_set(i,:)))
         %mismatch stores 0 on coords that match and the value of Class_set on coord mismatch
-        mismatch = (predicted(i,:) ~= Class_set(i,:)) .* Class_set(i,:);
+        mismatch = (predicted ~= Class_set(i,:)) .* Class_set(i,:);
         w = w + alpha*mismatch'*Train_set(i, :);
         b = b + alpha*mismatch';
         n_errors++;
@@ -57,6 +58,7 @@ function [b w error n_ages] = perceptron_train (alpha, theta, max_ages, Train_se
       
     end
     n_ages++;
+    ecm(n_ages) = ecm_iter / n_samples;
     error(n_ages) = n_errors / n_samples;
     stop_condition = ( isequal(b, previous_b) && isequal(w, previous_w) ) || (n_ages >= max_ages);
   endwhile

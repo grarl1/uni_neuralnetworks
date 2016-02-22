@@ -61,7 +61,7 @@ fclose(input_file);
 %   will be used both for training and testing.
 training = 0.7;
 test = 0.3;
-max_ages = 20;
+max_ages = 100;
 theta = 0;
 tolerance = 0.001;
 
@@ -77,7 +77,7 @@ Test_set = Sample_attr(test_indexes,:);
 
 %TODO remove following lines, are just for testint neural networks.
 % Train the perceptron
-[b w error n_ages] = perceptron_train(alpha, theta, max_ages, Train_set, Train_class);
+[b w error ecm n_ages] = perceptron_train(alpha, theta, max_ages, Train_set, Train_class);
 % Perform test for remaining samples.
 prediction = network_test(b, w, Test_set);
 printf("PERCEPTRON: \n");
@@ -85,10 +85,12 @@ printf("%% of accuracy over test set after %d ages of training:\n", n_ages);
 matched = all(prediction == Sample_class(test_indexes,:), 2);
 sum(matched)/length(matched)*100
 printf("%d misses\n",length(matched)-sum(matched));
+printf("ECM for Perceptron :\n");
+ecm
 
 %Train the Adaline
 alpha = 0.01;
-[b w error n_ages] = adaline_train(alpha, tolerance, max_ages, Train_set, Train_class);
+[b w error ecm n_ages] = adaline_train(alpha, tolerance, max_ages, Train_set, Train_class);
 prediction = network_test(b, w, Test_set);
 printf("ADALINE: \n");
 printf("%% of accuracy over test set after %d ages of training:\n", n_ages);
@@ -96,4 +98,4 @@ matched = all(prediction == Sample_class(test_indexes,:), 2);
 sum(matched)/length(matched)*100
 printf("%d misses\n",length(matched)-sum(matched));
 printf("ECM for Adaline :\n");
-error
+ecm

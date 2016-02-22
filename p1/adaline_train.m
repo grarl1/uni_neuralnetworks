@@ -21,7 +21,7 @@
 %   error: vector  of cuadratic error for each age
 %   n_ages: iterations performed during training.
 %
-function [b w error n_ages] = adaline_train (alpha, tol, max_ages, Train_set, Class_set)
+function [b w error ecm n_ages] = adaline_train (alpha, tol, max_ages, Train_set, Class_set)
 
   % Initializing values
   adaline_out_no = size(Class_set, 2); %number of output neurons
@@ -40,17 +40,21 @@ function [b w error n_ages] = adaline_train (alpha, tol, max_ages, Train_set, Cl
     previous_w = w;
     previous_b = b;
     n_errors = 0;
-    predicted = [];
-    mce = 0;
+    ecm_iter = 0;
 
     for i = 1:n_samples
       y_in = b + w*Train_set( i, : )';
       w = w + alpha*(Class_set(i,:)'-y_in)*Train_set(i, :);
       b = b + alpha*(Class_set(i,:)'-y_in);
-      mce += sum((Class_set(i,:)'-y_in).^2);
+      ecm_iter += sum((Class_set(i,:)'-y_in).^2);
+      predicted = f_y_adaline(y_in)';
+      if ( ~isequal( predicted, Class_set(i,:))) %if predicted class does not match actual class
+        n_errors++;
+      end
     end
     n_ages++;
-    error(n_ages)=mce;
+    ecm(n_ages) = ecm_iter/n_samples; 
+    error(n_ages) = n_errors / n_samples;
     max_b_change = max( abs( previous_b - b ) );
     max_w_change = max( max( abs( previous_w - w ) ) );
     stop_condition = ( ( ( max_b_change < tol ) && ( max_w_change < tol ) ) 

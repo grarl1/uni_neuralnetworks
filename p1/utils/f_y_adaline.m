@@ -10,5 +10,5 @@
 %     1 if y >= 0
 %    -1 if y < 0
 %
-function f_y = f_y_perceptron (y)
+function f_y = f_y_adaline (y)
   f_y = (y >= 0) - (y < 0);
