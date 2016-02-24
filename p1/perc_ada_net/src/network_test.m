@@ -18,6 +18,10 @@ function prediction = network_test (b, w, Test_set)
   prediction = [];
   for i = 1:n_test
     y = b + w*Test_set(i,:)'; 
-    f_y = (y == max(y))';   
+    f_y = (y == max(y))';
+    % in case more than one coordinate matches max value, remove every 1
+    % after first occurence
+    non_zero_i = find (f_y, 1);
+    f_y = [f_y(1:non_zero_i), zeros(1, length(f_y) - non_zero_i)];
     prediction = [prediction; f_y];
   end
