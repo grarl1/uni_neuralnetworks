@@ -8,7 +8,7 @@
 addpath("./src/");
 
 % Implements a learning perceptron given a file
-%   containing data to learn from.
+% containing data to learn from.
 
 % Input control
 args_list = argv();

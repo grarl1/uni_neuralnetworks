@@ -1,0 +1,86 @@
+\documentclass[spanish]{assignment}
+
+% Title page
+\title{Neurocomputación}
+\subtitle{Práctica 1 - Introducción a las Redes Neuronales Artificiales}
+\author{Enrique Cabrerizo Fernández\\ Guillermo Ruiz Álvarez}
+\date{\today}
+\university{Universidad Autónoma de Madrid}
+
+\begin{document}
+	\makepre
+	\section{Neuronas de McCulloch-Pitts}
+	En esta sección se detallará el diseño de una red con neuronas de \textbf{McCulloch-Pitts} que resuelven el problema propuesto en el enunciado de la práctica. En la figura \ref{fig:nnet} se puede observar la estructura de la red, en la que:
+	\begin{itemize}
+		\item Las neuronas $X_1, X_2$ y $X_3$ son los nodos de entrada, $Y_1$ e $Y_2$ son los nodos de salida, $Z_1, Z_2, Z_3$ son los nodos de la primera capa oculta, y $Z_4, \hdots, Z_9$ son los nodos de la segunda capa oculta. 
+		\item En cada nodo de la red, $\theta$ indica el valor del umbral. 
+		\item Los valores de las conexiones entre neuronas representan el peso en cada caso. En esta red se ha escogido el valor $1$ para todas las conexiones excitadoras y $-2$ para las conexiones inhibidoras.
+	\end{itemize}
+	\fimg{NNet.png}{width=25em}{Red de neuronas McCulloch-Pitts}{nnet}
+	
+	\subsection{Descripción del diseño de la red}
+	En el problema propuesto se especifica que la salida de la red en el instante $t$ ha de depender de la orientación del estímulo en $t-1$ con respecto al estímulo en $t-2$. Sin embargo, en el diseño realizado, la salida en el instante $t$ depende de la orientación del estímulo en $t-2$ con respecto al estímulo en $t-3$.
+	
+	Esto se debe a que, dado que se requiere un paso de tiempo para que una señal pase a través de una conexión, se necesitan al menos dos capas ocultas: una para almacenar el primer estímulo entrante y otra para realizar la comparación entre el estímulo almacenado y el consecutivo. 
+	
+	\subsubsection{Primera capa oculta}
+	Pasado el primer instante de tiempo, los valores de la entrada de la red se propagan a la primera capa oculta. Para ello, todas las conexiones entre la capa de entrada y la primera capa oculta son excitadoras (con valor $1$) y los valores de umbral de los nodos $Z_1, Z_2, Z_3$ son en todos los casos $\theta = 1$.
+	
+	\subsubsection{Segunda capa oculta}
+	En el segundo instante de tiempo, a cada nodo de la segunda capa oculta llegan los valores de dos nodos: uno de la entrada en el instante actual y uno de la entrada en el instante anterior (que está almacenado en la primera capa oculta). De esta forma, se pueden comparar los nodos de dos entradas consecutivas.
+	
+	Los nodos $Z_4, Z_5, Z_6$ comprueban si se ha producido un desplazamiento hacia abajo, y los nodos $Z_7, Z_8, Z_9$ comprueban si se ha producido desplazamiento hacia arriba.	Los valores llegan con peso $1$ a las neuronas de la segunda capa oculta, que tienen todas umbral $\theta=2$, es decir, cada nodo de la segunda capa oculta se activa sólo si los valores que llegan son ambos $1$.
+	
+	Si $Z_4, Z_5$ o $Z_6$ tienen un valor $1$, activarán la neurona de salida $Y_2$ y desactivarán la neurona de salida $Y_1$. Si $Z_7, Z_8$ o $Z_9$ tienen un valor $1$, activarán la neurona de salida $Y_1$ y desactivarán la neurona de salida $Y_2$. De esta manera, al tener un peso de $-2$ para la desactivación, se controlan las entradas inválidas haciendo que la salida para cualquier entrada invalida sea $(0\ 0)$, ya que se produce la desactivación de ambas neuronas si se detectan subidas y bajadas simultaneamente.
+	
+	Por otro lado, ya que las seis neuronas de la segunda capa oculta nunca comparan nodos que esten a la misma altura (es decir $X_i$ con $Z_i$ para $i=1,2,3$), si se tienen dos entradas consecutivas iguales, la segunda capa oculta tendrá todos sus nodos a $0$, y por tanto la salida será $(0\ 0)$.
+
+	\newpage
+	\paragraph{Ejemplo:}
+	A continuación se muestra un ejemplo en el que se detalla el comportamiento de la red en cada iteración temporal hasta producir la salida. Sean los siguientes estímulos:
+	\begin{center}
+		\begin{tabular}{c|c|c|}
+			& $t$ & $t+1$ \\
+			\hline
+			$X_1$ & $0$ & $1$   \\
+			$X_2$ & $0$ & $0$   \\
+			$X_3$ & $1$ & $0$  
+		\end{tabular}
+	\end{center}
+	
+	En la figura \ref{fig:nnetex1} se puede observar como evoluciona la red ante los estímulos descritos en la tabla anterior.
+	
+	\fimg{NNetEx1.png}{width=25em}{Evolución de la red de neuronas McCulloch-Pitts}{nnetex1}
+	
+	\begin{itemize}
+	\item En el instante $t$ entra el primer estímulo.
+	\item En el instante $t+1$ entra el segundo estímulo de forma que en la capa de entrada y en la primera capa oculta se tienen ambos almacenados.
+	\item En el instante $t+2$ se realizan todas las comprobaciones de bajada en los tres primeros nodos de la segunda capa oculta y todas las comprobaciones de subida en los tres últimos nodos de la misma capa. Se puede observar que el primer nodo detecta que se ha producido una bajada del tercer bit de la primera entrada al primer bit de la segunda, porque dicho nodo tiene umbral $\theta=2$ y ambos nodos llegan activos con peso $1$.
+	
+	\item En el instante $t+3$ se realiza una operacion \texttt{OR} de los tres primeros nodos de la segunda capa oculta, activándose el segundo nodo de la salida.
+	\end{itemize} 
+	
+	\subsection{Codificación de la red}
+	La red se ha codificado en forma de grafo mediante una matriz de adyacencia con pesos. De esta forma, la matriz $A = (a_{ij})_{N\times N}$, donde $N=14$ es el número de nodos de la red, cumple que la entrada $a_{ij}$ será
+	\begin{equation*}
+		a_{ij} = 
+		\left\{
+		\begin{array}{l l}
+		0 & \text{Los nodos } i,j \text{ no están conectados}\\
+		1 & \text{Los nodos } i,j \text{ tienen una conexión excitadora}\\
+		-2 & \text{Los nodos } i,j \text{ tienen una conexión inhibidora}
+		\end{array}
+		\right.
+	\end{equation*}
+	
+	De esta forma, si $v_t$ es un vector de tamaño $N$ con el estado de la red en el instante $t$, y $\theta$ es un vector de tamaño $N$ donde cada entrada representa el umbral de cada nodo, el estado en $t+1$ se obtiene como:
+	$$v_{t+1} = \left(v_t^T\cdot A\right) \ge \theta$$
+	
+	Donde $v_t^T$ representa el vector $v_t$ traspuesto y el operador $\ge$ compara entrada a entrada dos vectores devolviendo $1$ si la primera entrada es mayor o igual que la segunda y $0$ en caso contrario.
+	
+	\section{Perceptrón y Adaline}
+	En esta sección se describe el diseño dos tipos de redes neuronales artificales para resolver el problema propuesto: el Perceptrón y el Adaline.
+	
+	
+	
+\end{document}
