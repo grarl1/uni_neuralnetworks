@@ -60,7 +60,7 @@
 	\item En el instante $t+3$ se realiza una operacion \texttt{OR} de los tres primeros nodos de la segunda capa oculta, activándose el segundo nodo de la salida.
 	\end{itemize} 
 	
-	\subsection{Codificación de la red}
+	\subsection{Codificación de la red neuronal}
 	La red se ha codificado en forma de grafo mediante una matriz de adyacencia con pesos. De esta forma, la matriz $A = (a_{ij})_{N\times N}$, donde $N=14$ es el número de nodos de la red, cumple que la entrada $a_{ij}$ será
 	\begin{equation*}
 		a_{ij} = 
@@ -78,9 +78,64 @@
 	
 	Donde $v_t^T$ representa el vector $v_t$ traspuesto y el operador $\ge$ compara entrada a entrada dos vectores devolviendo $1$ si la primera entrada es mayor o igual que la segunda y $0$ en caso contrario.
 	
+	\newpage
 	\section{Perceptrón y Adaline}
-	En esta sección se describe el diseño dos tipos de redes neuronales artificales para resolver el problema propuesto: el Perceptrón y el Adaline.
+	En esta sección se describe el diseño dos tipos de redes neuronales artificales: el Perceptrón y el Adaline. El diseño de ambas redes es similar, cambiando en cada caso la regla de aprendizaje. Tanto para el perceptrón como para el Adaline se ha utilizado un esquema con varias neuronas de salida, es decir, tenemos tantas neuronas de salida como clases posibles.
 	
+	\subsection{Diseño y estructura}
+	Para describir la estructura de la red, llamaremos $n$ al número de parámetros que se utilizan para la clasificación, y $m$ al número de clases posibles.
+	\begin{itemize}
+		\item $x$: un vector fila de tamaño $n$, representando los parámetros que se utilizan para la clasificación.
+		\item $w$: una matriz $m\times n$, donde cada fila es el conjunto de pesos utilizado para clasificar cada clase.
+		\item $b$: un vector columna de tamaño $m$, donde cada elemento representa el sesgo utilizado para clasificar cada clase.
+		\item $y$: un vector columna de tamaño $m$, representando el resultado de la clasificación para cada clase.
+	\end{itemize}
+	De este modo, las neuronas de salida, se obtendrán como:
+	$$y = F\left(b + w\cdot x^T \right)$$
+	donde $F$ es una función matricial que aplica la función $f$ de aprendizaje a cada elemento del vector obtenido.
+	
+	\paragraph{Aprendizaje en el Perceptrón:}\mbox{}
+
+	Si $\theta$ es el valor del umbral y $y\_in = b + w\cdot x^T$, la respuesta de cada neurona de salida se calcula como:
+	\begin{equation*}
+		f_P(y\_in) = \left\{
+		\begin{array}{l l}
+			1 & y\_in > \theta\\
+			-1 & y\_in < -\theta\\
+			0 & \text{en otro caso}
+		\end{array}
+		\right.
+	\end{equation*}
+	Y la regla de aprendizaje entre dos periodos $n$ y $n+1$:
+	\begin{align*}
+		w_{n+1} &= w_n + \alpha\cdot t\cdot x\\
+		b_{n+1} &= b_n + \alpha\cdot t
+	\end{align*}
+	donde $t$ es el valor objetivo para $y$ y $\alpha$ la tasa de aprendizaje.
+	
+	\paragraph{Aprendizaje en el Adaline}\mbox{}
+	
+	Si y $y\_in = b + w\cdot x^T$, la respuesta de cada neurona de salida se calcula como:
+	\begin{equation*}
+		f_A(y\_in) = \left\{
+		\begin{array}{l l}
+			1 & y\_in > 0\\
+			-1 & y\_in < 0\\
+		\end{array}
+		\right.
+	\end{equation*}
+	Y la regla de aprendizaje entre dos periodos $n$ y $n+1$:
+	\begin{align*}
+		w_{n+1} &= w_n + \alpha\cdot (t-y)\cdot x\\
+		b_{n+1} &= b_n + \alpha\cdot t
+	\end{align*}
+	donde $t$ es el valor objetivo para $y$ y $\alpha$ la tasa de aprendizaje.
+	
+	\subsection{Experimentos realizados}
+	\subsubsection{Primer problema real}
+	Se ha realizado un programa que lee los datos del problema y realiza una partición aleatoria de los mismos. Una vez hecho esto, realiza el entrenamiento de la red.
+	
+	Tras el 
 	
 	
 \end{document}

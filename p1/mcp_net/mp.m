@@ -12,6 +12,17 @@ if (argc != 2)
   return
 end
 
+% Input
+input_file = fopen(args_list(1,1),'r');
+if (input_file == -1)
+  printf("%s: not a file\n", args_list{1, 1})
+  return
+end
+input_vector = fscanf(input_file, '%d', 3);
+
+% Ouput
+output_file = fopen(args_list(2,1),'w');
+
 % This matrix should be interpreted as follows:
 % Each row and column represents a perceptron.
 % The number in position (i,j) represents the weight
@@ -36,13 +47,6 @@ Net = sparse(Net);
 % of our net.
 threshold = [1 1 1 1 1 1 2 2 2 2 2 2 1 1];
 
-% Input
-input_file = fopen(args_list(1,1),'r');
-input_vector = fscanf(input_file, '%d', 3);
-
-% Ouput
-output_file = fopen(args_list(2,1),'w');
-
 % Main loop reads input file, extends it to a vector of 
 % length of *perceptron_No* with zeroes, then multiplies
 % it by Net matrix and checks activation thresholds to set 
@@ -50,8 +54,9 @@ output_file = fopen(args_list(2,1),'w');
 % After each iteration we print status of perceptrons 13 and 14
 % which represent the output layer of the neural net.
 status = zeros(1,14);
-while ( ( length(input_vector) ~= 0 ) || (status ~= 0) )
+while ( ( length(input_vector) ~= 0 ) || any(status(1:12)) )
   input_vector(14) = 0; % Extend vector read with zeros
+  input_vector = input_vector(:);
   status = status + transpose(input_vector);
   status = status * Net;
   status = ( status >= threshold );
