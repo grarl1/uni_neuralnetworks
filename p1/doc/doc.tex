@@ -33,7 +33,7 @@
 	
 	Si $Z_4, Z_5$ o $Z_6$ tienen un valor $1$, activarán la neurona de salida $Y_2$ y desactivarán la neurona de salida $Y_1$. Si $Z_7, Z_8$ o $Z_9$ tienen un valor $1$, activarán la neurona de salida $Y_1$ y desactivarán la neurona de salida $Y_2$. De esta manera, al tener un peso de $-2$ para la desactivación, se controlan las entradas inválidas haciendo que la salida para cualquier entrada invalida sea $(0\ 0)$, ya que se produce la desactivación de ambas neuronas si se detectan subidas y bajadas simultaneamente.
 	
-	Por otro lado, ya que las seis neuronas de la segunda capa oculta nunca comparan nodos que esten a la misma altura (es decir, $X_i$ con $Z_i$, para $i=1,2,3$), si se tienen dos entradas consecutivas iguales, la segunda capa oculta tendrá todos sus nodos a $0$, y por tanto la salida será $(0\ 0)$.
+	Por otro lado, ya que las seis neuronas de la segunda capa oculta nunca comparan nodos que estén a la misma altura (es decir, $X_i$ con $Z_i$, para $i=1,2,3$), si se tienen dos entradas consecutivas iguales, la segunda capa oculta tendrá todos sus nodos a $0$, y por tanto la salida será $(0\ 0)$.
 
 	\newpage
 	\paragraph{Ejemplo:}
@@ -95,7 +95,7 @@
 	$$y_{in} = b + w\cdot x^T$$
 	Entonces, la salida de la red vendrá dada por
 	$$y = F\left(y_{in}\right)$$
-	donde $F$ es una función matricial que aplica la función $f$ de aprendizaje a cada elemento del vector $y_{in}$ obtenido.
+	donde $F$ es una función matricial que aplica la función $f$ de transferencia a cada elemento del vector $y_{in}$ obtenido.
 	
 	
 	\newpage
