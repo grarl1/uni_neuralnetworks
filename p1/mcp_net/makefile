@@ -12,4 +12,4 @@ compile:
 	
 mccullogh:
 	@./$(EXEC_NAME) $(INPUT_FILE) $(OUTPUT_FILE)
-	@echo "Wrote to $(OUTPUT_FILE)"
+
