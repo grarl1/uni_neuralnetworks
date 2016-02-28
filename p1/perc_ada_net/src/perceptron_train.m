@@ -20,7 +20,7 @@
 %   w: weight vector
 %   error: vector of values between 0 and 1 representing, for each
 %     iteration of the main loop, the amount of matches between 
-%     class predicted and actual class being 0 a 100% match and 0 a 0%.
+%     class predicted and actual class being 0 a 100% match and 1 a 0%.
 %   n_ages: iterations performed during training.
 %
 function [b w error ecm n_ages] = perceptron_train (alpha, theta, max_ages, Train_set, Class_set)

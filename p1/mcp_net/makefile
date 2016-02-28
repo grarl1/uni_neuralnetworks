@@ -8,6 +8,8 @@ help:
 	@echo "mccullogh: Executes mp.m to solve the displacing bit problem taking"
 	@echo "inputs from INPUT_FILE and writing output to OUTPUT_FILE\n"
 
+compile:
+	
 mccullogh:
 	@./$(EXEC_NAME) $(INPUT_FILE) $(OUTPUT_FILE)
 	@echo "Wrote to $(OUTPUT_FILE)"
