@@ -64,7 +64,7 @@ p_non_linear: out_dir
 	@echo "Executing adaline: nor_non_linear"
 	@./$(ADA_EXEC) ./$(DATA_DIR)/nor_non_linear.txt ./$(OUT_DIR)/plogic_ada_nor_non_linear_out 0.1 1 20 0.00001
 	@echo "Executing adaline: xor_non_linear"
-	@./$(ADA_EXEC) ./$(DATA_DIR)/xor_non_linear.txt ./$(OUT_DIR)/plogic_ada_xo_non_linear_out 0.1 1 20 0.00001
+	@./$(ADA_EXEC) ./$(DATA_DIR)/xor_non_linear.txt ./$(OUT_DIR)/plogic_ada_xor_non_linear_out 0.1 1 20 0.00001
 	@echo "Solving second problem with the perceptron (non linear data)..."
 	@./$(PERC_EXEC) ./$(DATA_DIR)/problema_real2_non_linear.txt ./$(OUT_DIR)/p2_perc_non_linear_out 0.1 0.7 50 0
 	@echo "Solving second problem with the adaline (non linear data)..."
