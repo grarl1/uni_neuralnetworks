@@ -73,6 +73,9 @@ function [b w n_ages error] = bp_train(Train_set, Train_class, alpha, hidden_lay
       w{1} += delta_w_hidden;
       w{2} += delta_w_output;
       
+      %% Mean squared error
+      mse_iter += sum((Train_class(i, :)' - y).^2);
+      
       %% Classification %%
       if (~all((bp_classify(y) - Train_class(i, :)') == 0))
         n_errors++;
