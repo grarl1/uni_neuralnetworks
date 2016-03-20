@@ -15,7 +15,7 @@ function [Train_set, Train_class, Test_set, Test_class] = shuffle_samples(traini
   % Get the number of samples
   n_samples = size(Sample_attr, 1);
   % Shuffle entries indexes of the matrices
-  shuffled_indexes = shuffle_array(n_samples);
+  shuffled_indexes = randperm(n_samples);
   
   % Shuffle the training set.
   training_indexes = shuffled_indexes(1:floor(training_proportion*n_samples));
@@ -23,7 +23,7 @@ function [Train_set, Train_class, Test_set, Test_class] = shuffle_samples(traini
   Train_class = Sample_class(training_indexes,:);
 
   % Shuffle the test set.
-  test_indexes = shuffled_indexes(end-ceil(test*(n_samples - 1)):end);
+  test_indexes = shuffled_indexes(end-ceil((1-training_proportion)*(n_samples - 1)):end);
   Test_set = Sample_attr(test_indexes,:);
   Test_class = Sample_class(test_indexes,:);
   

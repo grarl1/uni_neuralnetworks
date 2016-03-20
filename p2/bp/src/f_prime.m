@@ -10,5 +10,5 @@
 %     f'(y) where f is the bipolar sigmoid function.
 %
 function f_prime = f_prime(f_y)
-  f_prime = (1/2) * (1+f_y).*(1-f_y)
+  f_prime = (1/2) * (1+f_y).*(1-f_y);
 end

@@ -10,5 +10,5 @@
 %     f(y) where f is the bipolar sigmoid function.
 %
 function f_y = f(y)
-  f_y = (2 ./ (1 + exp(-y))) - 1
+  f_y = (2 ./ (1 + exp(-y))) - 1;
 end
