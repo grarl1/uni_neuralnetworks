@@ -21,12 +21,18 @@ function [b w n_ages error] = bp_train(Train_set, Train_class, alpha, hidden_lay
   n_attr = size(Train_set, 2);
   n_classes = size(Train_class, 2);
   
-  % Initialize vectors with random values of a N(0, sigma)
-  sigma = 1e-3;
+  % Inicialization
+  gamma_val = 0.5;
   % Bias vectors
-  b = {sigma*randn(hidden_layer_n, 1), sigma*randn(n_classes, 1)};
+  b = {2*gamma_val*rand(hidden_layer_n, 1) - gamma_val, 2*gamma_val*rand(n_classes, 1) - gamma_val};
   % Weights matrices
-  w = {sigma*randn(hidden_layer_n, n_attr), sigma*randn(n_classes, hidden_layer_n)};
+  w = {2*gamma_val*rand(hidden_layer_n, n_attr) - gamma_val, 2*gamma_val*rand(n_classes, hidden_layer_n) - gamma_val};
+  
+  %% Nguyen-Widrow initialization algorithm
+  % beta_val = 0.7*hidden_layer_n^(1/n_attr);
+  % v_mod = sqrt(sum(w{1}.^2, 2));
+  % b{1} = 2*beta_val*rand(hidden_layer_n, 1) - beta_val;
+  % w{1} = (beta_val * w{1}) ./ repmat(v_mod, 1, size(w{1}, 2));
   
   % Change zeroes of Class_set to -1
   Train_class(Train_class == 0) = -1;
