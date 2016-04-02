@@ -24,12 +24,12 @@ all: tarea2 tarea3 tarea4 tarea5 tarea6
 
 out_dir:
 	@if ! [ -d ./$(OUTPUT_DIR) ]; then \
-		echo "Creating output directory ./$(OUTPUT_DIR)" ;\
+		echo "Creating output directory $(OUTPUT_DIR)" ;\
 		mkdir ./$(OUTPUT_DIR) ; \
 	fi
 
 # bp.m input_file training_percentage alpha hidden_layer_n output_file
-tarea2: xor pr1 out_dir
+tarea2: out_dir xor pr1
 
 pr1:
 	@echo "Training for $(PR1_IN) with alpha=0.01 and 4 hidden nodes"
