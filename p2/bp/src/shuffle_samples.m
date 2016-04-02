@@ -21,9 +21,15 @@ function [Train_set, Train_class, Test_set, Test_class] = shuffle_samples(traini
   training_indexes = shuffled_indexes(1:floor(training_proportion*n_samples));
   Train_set = Sample_attr(training_indexes,:);
   Train_class = Sample_class(training_indexes,:);
+  
+  if (training_proportion == 1)
+    test_proportion = 1;
+  else
+    test_proportion = 1-training_proportion;
+  end
 
   % Shuffle the test set.
-  test_indexes = shuffled_indexes(end-ceil((1-training_proportion)*(n_samples - 1)):end);
+  test_indexes = shuffled_indexes(end-ceil((test_proportion)*(n_samples - 1)):end);
   Test_set = Sample_attr(test_indexes,:);
   Test_class = Sample_class(test_indexes,:);
   

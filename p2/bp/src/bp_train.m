@@ -92,20 +92,23 @@ function [b w n_ages error] = bp_train(Train_set, Train_class, alpha, hidden_lay
     n_ages++;
     
     % Print age, mse and weights.
-    fprintf(output_file, "%d\t", n_ages);
-    fprintf(output_file, "%f\t", mse_iter / n_samples);
-    fprintf(output_file, "%f\t", b{1}(:));
-    fprintf(output_file, "%f\t", w{1}(:));
-    fprintf(output_file, "%f\t", b{2}(:));
-    fprintf(output_file, "%f\t", w{2}(:));
-    fprintf(output_file, "\n");
+    if (output_file ~= -1)
+      fprintf(output_file, "%d\t", n_ages);
+      fprintf(output_file, "%f\t", mse_iter / n_samples);
+      fprintf(output_file, "%f\t", b{1}(:));
+      fprintf(output_file, "%f\t", w{1}(:));
+      fprintf(output_file, "%f\t", b{2}(:));
+      fprintf(output_file, "%f\t", w{2}(:));
+      fprintf(output_file, "\n");
+    end
     
     % Update error values.
     error(n_ages) = n_errors / n_samples;
     
     % Check the stop condition.
-    stop_condition = (all((b{1} - prev_b{1}) == 0) && all((w{1} - prev_w{1}) == 0 )) && ...
-                     (all((b{2} - prev_b{2}) == 0) && all((w{2} - prev_w{2}) == 0 )) || ...
-                     (n_ages >= max_ages);
+    stop_condition = n_ages >= max_ages;
+    %stop_condition = (all((b{1} - prev_b{1}) == 0) && all((w{1} - prev_w{1}) == 0 )) && ...
+    %                 (all((b{2} - prev_b{2}) == 0) && all((w{2} - prev_w{2}) == 0 )) || ...
+    %                 (n_ages >= max_ages);
   end
 end
