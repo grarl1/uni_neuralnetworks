@@ -37,7 +37,7 @@ Norm_attr = (Sample_attr - repmat(mean(Sample_attr), size(Sample_attr, 1), 1)) .
 fprintf(output_file, "%d %d\n", [size(Sample_attr, 2) size(Sample_class, 2)])
 for i = 1 : size(Norm_attr, 1)
   fprintf(output_file, "%.2f ", Norm_attr(i,:));
-  fprintf(output_file, "%.2f ", Sample_class(i,:));
+  fprintf(output_file, "%d ", Sample_class(i,:));
   fprintf(output_file, "\n");
 end
 
