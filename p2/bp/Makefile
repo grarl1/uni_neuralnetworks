@@ -24,6 +24,18 @@ PR4_OUT = $(OUTPUT_DIR)/pr4.out
 PR4_IN_NORM = $(DATA_DIR)/problema-real4-norm.txt
 PR4_OUT_NORM = $(OUTPUT_DIR)/pr4norm.out
 
+help:
+	@echo "IMPORTANT: This program requires Octave to work\n"
+	@echo "Usage: make target\n"
+	@echo "Targets available:"
+	@echo "\t tarea2: Solves first real problem and xor problem with a multilayer perceptron."
+	@echo "\t tarea3: Solves third real problem with a multilayer perceptron for several attributes values."
+	@echo "\t tarea4: Solves fourth real problem with a multilayer perceptron."
+	@echo "\t tarea5: Solves fourth real problem with normalized attributes using a multilayer perceptron."
+	@echo "\t tarea6: Uses $(PR2_TRAIN_IN) to train a multilayer perceptron in order to solve "
+	@echo "\t\t $(PR2_TEST_IN).  Writes predictions in $(PR2_OUT)"
+	@echo "Outputs are generated in $(OUTPUT_DIR)."
+
 all: tarea2 tarea3 tarea4 tarea5 tarea6
 
 out_dir:
@@ -80,5 +92,5 @@ tarea5: out_dir
 	./$(BP_EXEC) $(PR4_IN_NORM) 70 0.01 7 $(PR4_OUT_NORM)
 
 tarea6: out_dir
-	@echo "Training for $(PR4_IN_NORM) with alpha=0.01 and 5 hidden nodes"
+	@echo "Training with $(PR2_TRAIN_IN) to solve $(PR2_TEST_IN) with alpha=0.01 and 5 hidden nodes"
 	./$(BP_PRED_EXEC) $(PR2_TRAIN_IN) $(PR2_TEST_IN) $(PR2_OUT) 0.01 5
