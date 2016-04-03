@@ -44,8 +44,8 @@ pr1:
 	@echo "Training for $(PR1_IN) with alpha=0.1 and 8 hidden nodes"
 	./$(BP_EXEC) $(PR1_IN) 70 0.1 8 $(PR1_OUT_A1)
 
-	@echo "Training for $(PR1_IN) with alpha=0.01 and 8 hidden nodes"
-	./$(BP_EXEC) $(PR1_IN) 70 0.01 8 $(PR1_OUT_A2)
+	@echo "Training for $(PR1_IN) with alpha=0.5 and 8 hidden nodes"
+	./$(BP_EXEC) $(PR1_IN) 70 0.5 8 $(PR1_OUT_A2)
 
 xor:
 	@echo "Training for $(XOR_IN) with alpha=0.01 and 2 hidden nodes"
