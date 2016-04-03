@@ -26,7 +26,7 @@
 	\section{Tarea 2: Chequeo del funcionamiento de la red.}
 	Se han ejecutado pruebas sobre el problema real 1 y sobre la función xor obteniendo los resultados que se discuten en los siguientes apartados:
 	
-	\subsection{Problema Real 1}
+	\subsection{Problema real 1}
 	En la figura \ref{fig:ECM_mosaic} podemos ver unas gráficas correspondientes al error cuadrático medio para variaciones de la tasa de aprendizaje $\alpha$ y el número de neuronas de la capa oculta.
 	
 	\begin{figure}[ht!]
@@ -89,7 +89,7 @@
 	
 	Como se puede comprobar, en las gráficas de ECM apenas existen diferencias, tienen un comportamiento muy similar y teóricamente correcto. Sí se puede observar que una tasa de aprendizaje demasiado alta produce fuertes oscilaciones en los pesos y consecuentemente en el ECM, por lo que preferiremos tasas de aprendizaje cercanas a cero, pero no demasiado pequeñas para que la convergencia no sea muy lenta. En esta práctica nuestro valor predilecto será $\alpha = 0.01$. Por otro lado se puede observar que, generalmente funciona mejor un número de nodos en la capa intermedia que sea menor o igual que el número de atributos de entrada y mayor o igual que el número de neuronas de salida. Los resultados cuando dicho número es estrictamente menor son muy similares a cuando es igual, si bien generalmente son mejores que cuando el número de neuronas de la capa oculta es mayor que el número de atributos de entrada y neuronas de salida.
 	
-	\subsection{Problema xor}
+	\subsection{Problema XOR}
 	En la práctica 1 veíamos como el problema xor no se podía resolver con un perceptrón de una sola capa por no ser linealmente separable. Con el perceptrón multicapa si ha sido posible resolver este problema, si bien ha sido necesario modificar el archivo de muestras para añadir más muestras (simplemente se han replicado las cuatro muestras del problema hasta alcanzar un total de aproximadamente 500). Con este archivo (xor2.txt) se puede resolver completamente el problema en 1000 épocas con una tasa de acierto de 100 \%.
 	
 	\newpage
@@ -172,6 +172,12 @@
 	Si comparamos los resultados con el del apartado anterior, podemos confirmar que la normalización de los datos mejora notablemente la velocidad de convergencia, obteniéndose así unos resultados mucho mejores tanto para el conjunto de entrenamiento ($99.6\%$) como para el conjunto de test ($94.3\%$), frente a los valores anteriores, que eran de un $80.2\%$ para el conjunto de entrenamiento y de un $60.3\%$ para el conjunto de test.
 	
 	\section{Tarea 6: Predicción de datos no etiquetados.}
-	Para realizar esta tarea, se ha realizado un programa que toma un fichero para entrenar la red y otro para clasificar, obteniéndose un fichero de salida con la clasificación obtenida. El fichero \textit{predicciones$\_$nnet.txt} se adjunta con la práctica.
+	Para realizar esta tarea, se ha realizado un programa que toma un fichero para entrenar la red y otro para clasificar, obteniéndose un fichero de salida con la clasificación obtenida. 
+	Tras varias pruebas utilizando el fichero con los datos clasificados, se han elegido los siguientes parámetros para resolver este problema:
+	\begin{itemize}
+		\item Número de nodos de la capa intermedia: $5$.
+		\item Valor de la tasa de aprendizaje $\alpha = 0.01$.
+	\end{itemize}
+	El fichero \textit{predicciones$\_$nnet.txt} se adjunta con la práctica.
 	
 \end{document}
