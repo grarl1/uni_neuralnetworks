@@ -10,7 +10,24 @@
 \begin{document}
 	\makepre
 	\section{Tarea 1: Implementación de la red neuronal.}
+	
 	\section{Tarea 2: Chequeo.}
 	
+	\section{Tarea 4: Predicción en un problema complejo}
+	80,2
+	68,3
 	
+	Se han calculado las medias y las desviaciones estándar de todos los atributos del problema, obteniéndose en para varios atributos, medias y desviaciones típicas muy grandes, incluso del orden de $10^3$.
+	
+	Normalmente, la convergencia es más rápida si las medias de los atributos son cercanas a cero. Esto se debe a que, en caso de que esto no ocurra, el descenso por gradiente del algoritmo de \textit{backpropagation} hará zig-zag en lugar de tomar la dirección de máximo decrecimiento, obteniéndose una convergencia más lenta. 
+	
+	La convergencia también es más rápida si los valores son reescalados y tienen desviación estándar 1. Esto se debe a que, si reescalamos los valores de entrada, se balancea la tasa a la que los pesos conectados a los nodos de entrada aprenden.
+	
+	Por tanto, si se normalizan los datos haciendo que el conjunto de los mismos tenga media 0 y desviación típica 1, se obtendrá una convergencia más rápida, y por tanto mejores resultados para el mismo número de épocas.
+	
+	\subsection{Tarea 5}
+	99,6
+	94,3
+	
+	\subsection{Tarea 6}
 \end{document}

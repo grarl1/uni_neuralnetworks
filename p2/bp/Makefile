@@ -17,7 +17,7 @@ PR3_IN = $(DATA_DIR)/problema-real-3clases.txt
 PR3_OUT = $(OUTPUT_DIR)/pr3.out
 PR4_IN = $(DATA_DIR)/problema-real4.txt
 PR4_OUT = $(OUTPUT_DIR)/pr4.out
-PR4_IN_NORM = $(DATA_DIR)/p2/problema-real4-norm.txt"
+PR4_IN_NORM = $(DATA_DIR)/problema-real4-norm.txt
 PR4_OUT_NORM = $(OUTPUT_DIR)/pr4norm.out
 
 all: tarea2 tarea3 tarea4 tarea5 tarea6
@@ -56,12 +56,12 @@ tarea3: out_dir
 	./$(BP_EXEC) $(PR3_IN) 70 0.01 4 $(PR3_OUT)
 
 tarea4: out_dir
-	@echo "Training for $(PR4_IN) with alpha=0.01 and 9 hidden nodes"
-	./$(BP_EXEC) $(PR4_IN) 70 0.01 9 $(PR4_OUT)
+	@echo "Training for $(PR4_IN) with alpha=0.01 and 7 hidden nodes"
+	./$(BP_EXEC) $(PR4_IN) 70 0.01 7 $(PR4_OUT)
 
 tarea5: out_dir
-	@echo "Training for $(PR4_IN_NORM) with alpha=0.01 and 9 hidden nodes"
-	./$(BP_EXEC) $(PR4_IN_NORM) 70 0.01 9 $(PR4_OUT_NORM)
+	@echo "Training for $(PR4_IN_NORM) with alpha=0.01 and 7 hidden nodes"
+	./$(BP_EXEC) $(PR4_IN_NORM) 70 0.01 7 $(PR4_OUT_NORM)
 
 tarea6: out_dir
 	@echo "Training for $(PR4_IN_NORM) with alpha=0.01 and 8 hidden nodes"
