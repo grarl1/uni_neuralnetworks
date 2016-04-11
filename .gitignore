@@ -4,7 +4,6 @@
 # Latex Aux
 *.aux
 *.log
-*.out
 #*.pdf
 *.synctex.gz
 *.toc
