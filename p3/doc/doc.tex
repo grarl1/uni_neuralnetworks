@@ -1,0 +1,166 @@
+\documentclass[spanish]{assignment}
+
+% Title page
+\title{Neurocomputación}
+\subtitle{Práctica 3 - Autoencoders y series temporales}
+\author{Enrique Cabrerizo Fernández\\ Guillermo Ruiz Álvarez}
+\date{\today}
+\university{Universidad Autónoma de Madrid}
+
+\begin{document}
+	\makepre
+	\section{Autoencoders.}
+	En esta sección se muestran varios resultados obtenidos por el autoencoder para el reconocimiento de caracteres. 
+	
+	En primer lugar, se ha modificado el fichero \texttt{alfabeto.dat} obteniendo un fichero \texttt{alfabeto.txt} en el que en cada línea se encuentran los 35 atributos representando el caracter correspondiente ($7\times 5$ píxeles por caracter), y 35 datos de salida que son iguales a los de entrada. Este fichero ha sido formateado de tal forma que sea legible por la red neuronal que utiliza \textit{backpropagation} implementado en la práctica anterior, de tal modo que las predicciones son píxeles negros (1) o blancos (0) en función de si cada salida de la red neuronal es mayor, o menor o igual que cero, respectivamente.
+	
+	La red de retropropagación se ha modificado de tal forma que acepta dos parámetros nuevos:
+	\begin{itemize}
+		\item \texttt{f\_training:} Indica el número de distorsiones que se añadirán al conjunto de training. 
+		\item \texttt{f\_test:} Indica el número de distorsiones que se añadirán al conjunto de test.
+	\end{itemize}
+	
+	En ambos casos, en caso de que el valor del nuevo parámetro sea $n>0$, se generarán 10 versiones ruidosas para cada letra, esto es, se tendrán 10 copias de cada muestra y para cada una de ellas se alerarán $n$ valores aleatorios. En caso de que $n=0$, entonces se omitirá este parámetro, es decir, se realizarán los cálculos sin añadir versiones ruidosas.
+	
+	El cambio se realizará de la siguiente forma: si $p$ es el valor del píxel a cambiar, el nuevo valor será el siguiente ($\%$ representa la operación módulo, de tal modo que se cambiará el valor $0$ por $1$ y viceversa): $$p = (p + 1) \% 2$$ 
+	
+	El programa informará, tras la ejecución cual ha sido el valor de \texttt{PE\_Test:} el error promedio cometido en la fase de test medido en \textbf{PE} (píxeles errados por letra).
+	
+	Tras la modificación del fichero para que la red que utiliza retropropagación pueda tomarlo como entrada, se han realizado tres casos de prueba:
+	\begin{itemize}
+		\item \textbf{Caso 1:} Tanto el conjunto de entrenamiento como el conjunto de test no contienen versiones ruidosas.
+		\item \textbf{Caso 2:} El conjunto de entrenamiento no contiene versiones ruidosas y el conjunto de test contiene 10 versiones ruidosas por cada letra. Se utilizan valores para \texttt{f\_test} de $1, 3$ y $5$.
+		\item \textbf{Caso 3:} Tanto el conjunto de entrenamiento como el de test tendrán 10 versiones ruidosas por cada letra. Se utilizan valores para \texttt{f\_training} y \texttt{f\_test} de $1, 3$ y $5$.
+	\end{itemize}
+	
+	\subsection{Caso 1: Abecedario sin ruido.}
+	Para este caso se han realizado varias pruebas con distinto número de nodos de la capa interna de la red. El resto de parámetros utilizados son:
+	\begin{itemize}
+		\item Número máximo de épocas: $200$
+		\item Porcentaje de datos utilizado para la fase de training: $100\%$
+		\item Porcentaje de datos utilizado para la fase de test: $100\%$
+		\item Tasa de aprendizaje: $\alpha = 0.01$
+		\item Ruido en fase de training: \texttt{f\_training} $= 0$
+		\item Ruido en fase de test: \texttt{f\_test} $= 0$
+	\end{itemize}
+	
+	Los resultados obtenidos son los siguientes:
+	\begin{center}
+	\begin{tabular}{|c|c|}
+		\hline
+		\textbf{N.Nodos capa oculta} & \textbf{PE\_Test} \\ 
+		\hline
+		$10$ & $0.2692$ \\
+		$15$ & $0.1154$ \\
+		$18$ & $0.0385$ \\
+		$20$ & $0.00$ \\
+		$25$ & $0.00$ \\
+		$30$ & $0.00$ \\
+		$35$ & $0.00$\\
+		\hline
+	\end{tabular}
+	\end{center}
+	
+	Es decir, se tiene que se puede aprender el abecedario completo poniendo un número de neuronas de la capa oculta $\ge 20$. Por lo que no es necesario escoger un subconjunto menor del conjunto total, ya que la red es capaz de aprender el abecedario completo.
+	
+	\subsection{Caso 2: Conjunto de test con ruido.}
+	Para este caso se han realizado diversas pruebas variando el valor del parámetro \texttt{f\_test}, tomando éste los valores $1$, $3$ y $5$. Es decir, se generarán 10 copias ruidosas de cada letra y en cada copia se invertirán $1$, $3$ y $5$ píxeles, respectivamente, en posiciones aleatorias.
+	Los parámetros utilizados para las pruebas han sido los siguientes:
+	\begin{itemize}
+		\item Número máximo de épocas: $200$
+		\item Número de nodos en la capa oculta: $25$.
+		\item Porcentaje de datos utilizado para la fase de training: $100\%$
+		\item Porcentaje de datos utilizado para la fase de test: $100\%$
+		\item Tasa de aprendizaje: $\alpha = 0.01$
+		\item Ruido en fase de training: \texttt{f\_training} $= 0$
+	\end{itemize}
+
+	Los resultados obtenidos son los siguientes:
+	\begin{center}
+		\begin{tabular}{|c|c|c|}
+			\hline
+			\textbf{f\_test} & \textbf{PE\_Training} & \textbf{PE\_Test} \\ 
+			\hline
+			$1$ & $0.00$ & $0.1192$ \\
+			$1$ & $0.00$ & $0.1577$ \\
+			$1$ & $0.00$ & $0.1423$ \\
+			\hline
+			$3$ & $0.00$ & $0.8769$ \\
+			$3$ & $0.00$ & $0.8154$ \\
+			$3$ & $0.00$ & $0.8038$ \\
+			\hline
+			$5$ & $0.00$ & $2.1231$ \\
+			$5$ & $0.00$ & $2.0923$ \\
+			$5$ & $0.00$ & $2.1269$ \\
+			\hline
+		\end{tabular}
+	\end{center}
+	
+	Como se puede observar, en todo momento la red aprende sin fallos todo el abecedario (el valor de \texttt{PE\_training} es siempre $0$), ya que no se alteran los datos en la fase de training y se ha elegido utilizar $25$ neuronas en la capa oculta. Sin embargo, el número medio de errores cometidos en la fase de test es distinto de cero en todos los casos debido al ruido introducido. 
+	
+	Aún así, incluso con el ruido introducido, el número de errores promedio que se ha cometido en la fase de test (\texttt{PE\_Test}) es siempre menor que el número de alteraciones introducidas (\texttt{f\_test}). Por lo que la red neuronal es capaz de disminuir el ruido introducido.
+	
+	\subsection{Caso 3: Conjuntos de training y test con ruido}
+	Para este caso se han realizado diversas pruebas variando tanto el valor del parámetro \texttt{f\_training} como el valor del parámetro \texttt{f\_test}, tomando estos los valores $1$, $3$ y $5$. Es decir, para ambos conjuntos de training y test se generarán 10 copias ruidosas de cada letra y en cada copia se invertirán $1$, $3$ y $5$ píxeles, respectivamente, en posiciones aleatorias.
+	Los parámetros utilizados para las pruebas han sido los siguientes:
+	\begin{itemize}
+		\item Número máximo de épocas: $200$
+		\item Número de nodos en la capa oculta: $25$.
+		\item Porcentaje de datos utilizado para la fase de training: $100\%$
+		\item Porcentaje de datos utilizado para la fase de test: $100\%$
+		\item Tasa de aprendizaje: $\alpha = 0.01$
+	\end{itemize}
+	
+	\newpage
+	Los resultados obtenidos son los siguientes:
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{f\_training} & \textbf{f\_test} & \textbf{PE\_Training} & \textbf{PE\_Test} \\ 
+		\hline
+		$1$ & $1$ & $0.0000$ & $0.0538$\\
+		$1$ & $1$ & $0.0000$ & $0.0615$\\
+		$1$ & $1$ & $0.0115$ & $0.0692$\\
+		\hline
+		$3$ & $3$ & $0.0038$ & $0.5346$\\
+		$3$ & $3$ & $0.0000$ & $0.4077$\\
+		$3$ & $3$ & $0.0038$ & $0.4269$\\
+		\hline
+		$5$ & $5$ & $0.0038$ & $1.4654$\\
+		$5$ & $5$ & $0.0154$ & $1.4923$\\
+		$5$ & $5$ & $0.0692$ & $1.3962$\\
+		\hline
+		\end{tabular}
+	\end{center}
+	
+	Se puede observar que esta vez sí que varía el valor de \texttt{PE\_Training} debido al ruido introducido en el entrenamiento. Sin embargo, el error promedio cometido durante la fase de entrenamiento no llega a $0.1$ píxeles por letra. Esto implica que a veces la red no es capaz de aprender al $100\%$ el abecedario completo, sin embargo, al ser entrenada con varias muestras con ruido introducido y siempre la salida correcta, es capaz de disminuir de manera importante el ruido introducido en la fase de test.
+	
+	En la siguiente tabla se muestra una comparación de los valores de \texttt{PE\_Test} entre el \textbf{Caso 2} y el \textbf{Caso 3}.
+	
+	\vspace{5mm}
+	\noindent\makebox[\textwidth][c]{
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			\textbf{f\_training} & \textbf{f\_test} & \textbf{Caso 2: PE\_Test} & \textbf{Caso 3: PE\_Test} & \textbf{\% de mejora}\\ 
+			\hline
+			$1$ & $1$ & $0.1192$ & $0.0538$ & $121.56\%$ \\
+			$1$ & $1$ & $0.1577$ & $0.0615$ & $156.42\%$ \\
+			$1$ & $1$ & $0.1423$ & $0.0692$ & $105.64\%$ \\
+			\hline
+			$3$ & $3$ & $0.8769$ & $0.5346$ & $64.03\%$ \\
+			$3$ & $3$ & $0.8154$ & $0.4077$ & $100.00\%$ \\
+			$3$ & $3$ & $0.8038$ & $0.4269$ & $88.29\%$ \\
+			\hline
+			$5$ & $5$ & $2.1231$ & $1.4654$ & $44.88\%$ \\
+			$5$ & $5$ & $2.0923$ & $1.4923$ & $40.21\%$ \\
+			$5$ & $5$ & $2.1269$ & $1.3962$ & $52.34\%$ \\
+			\hline
+		\end{tabular}
+	}
+	\vspace{5mm}
+	
+	En la tabla se muestra el porcentaje de mejora del error obtenido en el \textbf{caso 2} y el \textbf{caso 3}. Se puede observar que en todo momento se supera el $40\%$ de mejora. Por tanto, aunque haya casos en los que la red no pueda aprender el abecedario completo con ruido introducido, se obtienen mejores resultados a la hora de predecir datos con ruido.
+		
+	\newpage
+	\section{Series temporales.}
+\end{document}

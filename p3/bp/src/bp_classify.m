@@ -8,7 +8,5 @@
 %   -prediction: A vector filled of -1 except for one value,
 %    whose position corresponds to the class predicted.
 function [prediction] = bp_classify(y)
-  prediction = repmat(-1, size(y));
-  [max, imax] = max(y);
-  prediction(imax) = 1;
+  prediction = (y > 0) - (y <= 0);
 end

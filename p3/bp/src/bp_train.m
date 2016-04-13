@@ -83,9 +83,7 @@ function [b w n_ages error] = bp_train(Train_set, Train_class, alpha, hidden_lay
       mse_iter += sum((Train_class(i, :)' - y).^2);
       
       %% Classification %%
-      if (~all((bp_classify(y) - Train_class(i, :)') == 0))
-        n_errors++;
-      end
+      n_errors += sum(abs(bp_classify(y) - Train_class(i, :)'))/2;
     end
     
     % Age completed.
