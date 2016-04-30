@@ -1,5 +1,8 @@
 \documentclass[spanish]{assignment}
 
+\usepackage{amsmath}
+\usepackage{float}
+
 % Title page
 \title{Neurocomputación}
 \subtitle{Práctica 3 - Autoencoders y series temporales}
@@ -163,4 +166,147 @@
 		
 	\newpage
 	\section{Series temporales.}
+	\subsection{Código Implementado.}
+	La implementación para los primeros cuatro ejercicios de series temporales se encuentran en la carpeta \textbf{bp/} (scripts) y en la subcarpeta \textbf{bp/src} (funciones).\\
+
+	Para adaptar el fichero se ha creado el script \textit{adapta\_fichero.m} que hace uso de la función \textit{adapta\_fichero\_serie} implementada acorde a las especificaciones del ejercicio 1.\\
+	
+	Para cumplir lo pedido en los ejercicios 2 y 3, se han creado copias de las funciones de entrenamiento de perceptron lineal \textit{bp\_train.m} y \textit{network\_test.m} y se han adaptado al nuevo código cambiando las funciones de transferencia y computando el error cuadrático medio en test. Dichas funciones se encuentran en \textit{bp\_train\_time.m} y \textit{network\_test\_time.m}. Los scripts que ejecutan los ejercicios de series temporales son \textit{series.m} y \textit{series\_recursive.m}, este último, como pide el ejercicio 8, se apoya en la función \textit{predice\_recursivamente.m}.
+	
+	\subsection{Ejercicio 5.}
+	En la siguiente figura podemos ver la gráfica correspondiente a la serie temporal \textit{p3\_serie1.txt}.
+	
+		\begin{figure}[H]
+			\centering
+			\includegraphics[scale=0.4]{p3_serie1.png}		
+			\caption{Serie temporal del fichero \textit{p3\_serie1.txt}.}				
+		\end{figure}
+	
+	Como se puede comprobar es una serie temporal bastante sencilla (es periódica) que se corresponde con una ecuación sinusoidal. La expresión explícita de la serie que representa es:
+	
+	\begin{align*}
+		valor(t) = 2 + 2sin\left(\frac{\pi}{100}t\right)
+	\end{align*}
+	
+	\subsection{Ejercicios 6 y 7.}
+	A continuación se muestra una tabla con los valores del error cuadrático medio obtenido para las predicciones y la predicción básica con las diferentes pruebas realizadas.
+	
+	\vspace{5mm}
+	\noindent\makebox[\textwidth][c]{
+		\begin{tabular}{|c|c|c|c|c|c|c|}
+			\hline
+			& \multicolumn{2}{c|}{\textbf{NA=1}} & \multicolumn{2}{c|}{\textbf{NA=2}} & \multicolumn{2}{c|}{\textbf{NA=5}} \\ \hline
+			Training \%&     25\%      &     50\%      &      25\%     &      50\%     &      25\%     &      50\%     \\ \hline
+			MSE &     0.613495      &     0.183084      &     0.403417      &     0.035622      &     0.087812      &      0.038827     \\ \hline
+			MSE básico &      0.002003     &      0.002002     &     0.001993     &      0.002002     &     0.1982     &      0.001985     \\ \hline
+		\end{tabular}
+	}
+	\vspace{5mm}
+	
+	Como se puede comprobar, los errores son mayores con la predicción realizada con el perceptrón que con la predicción básica, lo que nos indica que en general no está resultando un buen método para resolver el problema. Podemos ver sin embargo que los mejores valores de error se encuentran para $Na = 2$.\\
+	
+	Indagando en este aspecto, podemos ver que el seno es una función que cumple $sin''(t) = -sin(t)$. La segunda derivada la podemos aproximar como combinación lineal de los valores en $sin(t)$,$sin(t-1)$ y $sin(t-2)$, de forma que la función seno en $t$ se puede aproximar linealmente con los valores en $t-1$ y $t-2$.
+	No obstante, nuestra función de transferencia (sigmoide bipolar), no es lineal, con lo que la red se ve obligada a trabajar con pesos en una zona en la que la sigmoide sea lo más lineal posible (pesos muy cercanos a 0). Aún así el resultado no es demasiado satisfactorio. Para contrastar este hecho intuitivo, se ha probado a cambiar la función de transferencia a la identidad, logrando un error cuadrático medio en test de $0.000026$ para $Na=2$, mejorando considerablemente el error de la predicción básica.\\
+	
+	Por otro lado, se puede comprobar que los errores son mayores también cuando entrenamos únicamente con el 25\% del conjunto ya que no enseñamos al perceptrón una oscilación completa de la función seno y por lo tanto no es capaz de aprender a predecir correctamente con valores negativos.\\
+	
+	En las figuras \ref{pred_no_lineal_ini}-\ref{pred_no_lineal_end} se pueden ver gráficas con las predicciones para los distintos valores de Na y porcentajes de entrenamiento.\\
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{predNA1.png}		
+		\caption{Predicciones para NA = 1.}				
+		\label{pred_no_lineal_ini}
+	\end{figure}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{predNA2.png}		
+		\caption{Predicciones para NA = 2.}				
+	\end{figure}
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale=0.25]{predNA5.png}		
+		\caption{Predicciones para NA = 5.}				
+		\label{pred_no_lineal_end}
+	\end{figure}
+	
+	Como se puede comprobar en dichas figuras, una de las mejores predicciones en cuanto a similitud de la gráfica es la realizada para NA = 2 y entrenamiento con el 50\% de las muestras (una oscilación completa), no obstante, la predicción realizada para los mismos parámetros, pero con función de transferencia lineal tanto en la capa de salida como en la capa oculta es mucho más precisa y se puede ver en la figura \ref{pred_lineal}.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{predNA2Lineal.png}		
+		\caption{Predicciones para NA = 2 y función de transferencia lineal.}				
+		\label{pred_lineal}
+	\end{figure}
+	
+	No obstante se ha detectado una mejora en el error cuadrático medio utilizando la función de transferencia sigmoide cuando se aumenta el número de neuronas en la capa oculta, si bien han sido necesarias 50 neuronas en la capa oculta para bajarlo hasta 0.015744, que sigue siendo mayor que el error de la predicción básica.
+	
+	\subsection{Ejercicio 9.}
+	En la figura \ref{recursive_p1} podemos ver la serie original y la evolución de las predicciones recursivas desde diferentes puntos.
+		
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{recursive_p1.png}		
+		\caption{Predicciones recursivas. NA = 5.}				
+		\label{recursive_p1}
+	\end{figure}
+		
+	Como se puede comprobar, la predicción recursiva no es, en absoluto precisa. En ocasiones se ha logrado que la serie que se representa sea bastante similar a una función sinusoidal, pero el período de dicha función suele verse reducido a $\frac{1}{4}$ del período original.
+	
+	Se ha probado a realizar dichas predicciones con función de transferencia lineal también en la capa oculta obteniendo un resultado que aproxima mejor la función sinusoidal. Se puede ver en la siguiente gráfica.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{recursive_lin.png}		
+		\caption{Predicciones recursivas con transferencia lineal.}				
+		\label{recursive_lin}
+	\end{figure}
+	
+	En este caso se puede comprobar como las gráficas se aproximan muy bien inicialmente a la serie temporal original, aunque tras una serie de pasos, el error cometido se acumula y va provocando la separación entre ambas.
+	
+	\subsection{Ejercicio 10.}
+	En la figura \ref{grafico_p2} vemos el aspecto de la serie temporal de la segunda serie proporcionada como material de la práctica y, como se puede ver, esta serie es considerablemente más complicada que la del ejercicio anterior, ya que aparentemente no es periódica.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{p3_serie2.png}		
+		\caption{Serie temporal 2.}				
+		\label{grafico_p2}
+	\end{figure}
+	
+	En la siguiente tabla vemos los valores del error cuadrático medio para las diferentes pruebas realizadas, en las que se ha utilizado el 50\% del set de entrenamiento:
+	
+	\vspace{5mm}
+	\noindent\makebox[\textwidth][c]{
+		\begin{tabular}{|c|c|c|c|}
+			\hline
+			& \textbf{NA=1} & \textbf{NA=2} & \textbf{NA=5} \\ \hline
+			MSE &    23.855451   &   17.865888     &    11.584109   \\ \hline
+			MSE básico &   48.740883   &   48.740883   &   48.748843   \\ \hline
+		\end{tabular}
+	}
+	\vspace{5mm}
+	
+	Se observa que en esta ocasión aparentemente funciona mejor Na = 5. Para este dato la gráfica con las predicciones es la siguiente:
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{p3_serie2_NA5.png}		
+		\caption{Serie temporal y predicciones con NA = 5.}				
+		\label{grafico_serie2_predNA5}
+	\end{figure}
+	
+	Podemos observar a simple vista que la predicción se concentra alrededor de unos 10 valores distintos mientras que la serie original no sigue ningún patrón aparente, con lo que la predicción no es buena.
+	
+	Ante este resultado no podemos esperar una predicción recursiva demasiado precisa, como vemos a continuación.
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{p3_serie2_rec.png}		
+		\caption{Serie temporal y predicciones recursivas con NA = 5.}				
+		\label{grafico_serie2_predNA5_rec}
+	\end{figure}
+	
+	
+	
 \end{document}
