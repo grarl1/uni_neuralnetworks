@@ -30,7 +30,7 @@ help:
 	@echo "\t tarea2_10: Series: Recursive predictions for p3_serie2."
 	@echo "Outputs are generated in $(OUTPUT_DIR)."
 
-all: tarea1_1 tarea1_2 tarea1_3
+all: tarea1_1 tarea1_2 tarea1_3 tarea2_4 tarea2_9 tarea2_10 tarea2_10_rec
 
 out_dir:
 	@if ! [ -d ./$(OUTPUT_DIR) ]; then \
@@ -48,7 +48,7 @@ tarea1_1: out_dir
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 30 0 0
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 35 0 0
 
-tarea1_2:
+tarea1_2: out_dir
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 0 1
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 0 1
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 0 1
@@ -59,7 +59,7 @@ tarea1_2:
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 0 5
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 0 5
 
-tarea1_3:
+tarea1_3: out_dir
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 1 1
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 1 1
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 1 1
@@ -70,7 +70,7 @@ tarea1_3:
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 5 5
 	./$(BP_EXEC) $(PR1_IN) $(PR1_OUT) 100 0.01 25 5 5
 
-tarea2_4:
+tarea2_4: out_dir
 	#Na = 1, Ns 1
 	./$(ADAPTA_EXEC) $(PR2_1_IN) $(PR2_1_OUT) 1 1
 	./$(SERIES_EXEC) $(PR2_4_IN) $(PR2_4_OUT) 50 0.05 1
@@ -84,14 +84,14 @@ tarea2_4:
 	./$(SERIES_EXEC) $(PR2_4_IN) $(PR2_4_OUT) 50 0.05 1
 	./$(SERIES_EXEC) $(PR2_4_IN) $(PR2_4_OUT) 25 0.05 1
 
-tarea2_9:
+tarea2_9: out_dir
 	./$(ADAPTA_EXEC) $(PR2_1_IN) $(PR2_9_IN) 5 1
 	./$(SERIES_REC_EXEC) $(PR2_9_IN) $(PR2_9_OUT) 50 0.05 10 20
 	./$(SERIES_REC_EXEC) $(PR2_9_IN) $(PR2_9_OUT) 50 0.05 10 60
 	./$(SERIES_REC_EXEC) $(PR2_9_IN) $(PR2_9_OUT) 50 0.05 10 100
 	./$(SERIES_REC_EXEC) $(PR2_9_IN) $(PR2_9_OUT) 50 0.05 10 140
 
-tarea2_10:
+tarea2_10: out_dir
 	#Na = 1, Ns 1
 	./$(ADAPTA_EXEC) $(PR2_10_BASE) $(PR2_10_IN) 1 1
 	./$(SERIES_EXEC) $(PR2_10_IN) $(PR2_10_OUT) 50 0.05 5
@@ -102,6 +102,6 @@ tarea2_10:
 	./$(ADAPTA_EXEC) $(PR2_10_BASE) $(PR2_10_IN) 5 1
 	./$(SERIES_EXEC) $(PR2_10_IN) $(PR2_10_OUT) 50 0.05 5
 
-tarea2_10_rec:
+tarea2_10_rec: out_dir
 	./$(ADAPTA_EXEC) $(PR2_10_BASE) $(PR2_10_IN) 5 1
 	./$(SERIES_REC_EXEC) $(PR2_10_IN) $(PR2_10_OUT) 50 0.05 5 20
