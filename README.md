@@ -1,3 +1,5 @@
 # NeuralNetworks
-Assignments of artificial neural networks.
+
+Artificial neural networks assignments.
+
 Reports written in Spanish.
